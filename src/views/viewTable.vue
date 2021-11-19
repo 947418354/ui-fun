@@ -8,6 +8,7 @@
 
 <script>
 import ViewTable from "view-table";
+import Vue from 'vue/dist/vue.esm.js'
 
 export default {
   mounted() {
@@ -17,9 +18,36 @@ export default {
     resetDeafultOptions() {
       return {
         fixedCol: 1,
+        fixedRightCol: 2,
       }
     },
-    formatterRowData() {},
+    viewTableFat() {
+      return {
+        operation() {
+          return `<div class="fund-operate-col"><button @click="onClickSee">查看</button></div>`
+        }
+      }
+    },
+    _table_special_onCellRendered(e, d) {
+      console.log(e, d)
+      const vm = this
+      let vueEl = $(d.el).find('.fund-operate-col')
+      if (vueEl.length > 0) {
+        new Vue({
+          el: vueEl.get(0),
+          data() {
+            return {
+              row: d.row,
+            }
+          },
+          methods: {
+            onClickSee() {
+              console.log('see')
+            }
+          },
+        })
+      }
+    },
     transferColsData() {
       let arr = [{
         name: '固定列头',
@@ -38,6 +66,11 @@ export default {
           childs,
         });
       }
+      arr.push({
+        name: '操作',
+        id: 'operate',
+        fat: 'operation'
+      })
       return arr;
     },
     transferRowsData() {
@@ -53,6 +86,22 @@ export default {
       }
       return arr;
     },
+    // 绑定table事件
+    handleTableEvent: function () {
+      let c = 0
+      const vm = this
+      let viewtable = vm._viewTableInstance_viewTable
+      // let events = ["onClick", "onCheckboxClick", "onCheckboxTotalClick", "onHeaderMouseOver", "onCellMouseOver", "onCellRendered", "onHeaderCreated", "onSort", 'onMultiLevelClick']
+      let events = ['onCellRendered']
+      events.forEach((evt, index) => {
+        viewtable.bind(evt, (e, d) => {
+          console.log(++c)
+          if (vm["_table_special_" + evt]) {
+            vm["_table_special_" + evt](e, d)
+          }
+        })
+      })
+    },
     initViewTable(tableName) {
       tableName = tableName || "viewTable";
       let $container = $(this.$refs[tableName]);
@@ -63,14 +112,15 @@ export default {
         $container
       ));
       let opt = this.resetDeafultOptions();
-      let fat = this.formatterRowData();
+      let fat = this.viewTableFat();
       let cols = this.transferColsData();
       let rows = this.transferRowsData(tableName);
 
       viewtable.setOpt(opt)
-      // viewtable.setFat(fat)
+      viewtable.setFat(fat)
       console.log("cols, rows", cols, rows);
       viewtable.setData(cols, rows);
+      this.handleTableEvent()
       viewtable.render();
     },
     updateTable(tableName) {
