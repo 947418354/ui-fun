@@ -19,6 +19,10 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
+    path: '/viewTable',
+    component: () => import('../views/viewTable.vue')
+  },
+  {
     path: '/virtualScroll',
     name: 'virtualScroll',
     component: () => import(/* webpackChunkName: "virtualScroll" */ '../views/virtualScroll.vue')

@@ -1,3 +1,5 @@
+const webpack = require('webpack')
+
 module.exports = {
   devServer: {
     proxy: {  // 跨域代理配置
@@ -6,5 +8,16 @@ module.exports = {
         changeOrigin: true,
       }
     }
+  },
+  configureWebpack: {
+    plugins: [
+      new webpack.ProvidePlugin({
+        _: "lodash",
+        $: "jquery",
+      }),
+    ],
+    resolve: {
+      modules: ['./cus_node_modules', 'node_modules']
+    },
   }
 }
