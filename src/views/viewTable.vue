@@ -50,7 +50,7 @@ export default {
       }
     },
     transferColsData() {
-      // return []
+      return []
       let arr = [{
         name: '固定列头',
         id: 'fixed',
@@ -76,7 +76,7 @@ export default {
       return arr;
     },
     transferRowsData() {
-      // return []
+      return []
       let arr = [];
       for (let index = 0; index < 100; index++) {
         const obj = {
