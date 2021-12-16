@@ -19,6 +19,7 @@ export default {
       return {
         fixedCol: 1,
         fixedRightCol: 2,
+        enCheckbox: false,
       }
     },
     viewTableFat() {
@@ -49,6 +50,7 @@ export default {
       }
     },
     transferColsData() {
+      // return []
       let arr = [{
         name: '固定列头',
         id: 'fixed',
@@ -74,6 +76,7 @@ export default {
       return arr;
     },
     transferRowsData() {
+      // return []
       let arr = [];
       for (let index = 0; index < 100; index++) {
         const obj = {
